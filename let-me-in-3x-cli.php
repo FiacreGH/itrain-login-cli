@@ -11,10 +11,18 @@ $authentificate->connect('authentificate');
 $logger = new Logger();
 for ($i = 1; $i <= 3; $i++) {
 	$logger->log('Bonjour, qui êtes-vous?');
+	# @todo renommer la variable username
 	$usr = trim(fgets(STDIN));
 	$logger->log('Et votre passe?');
+	# @todo renommer la variable password
 	$pass = trim(fgets(STDIN));
+	# @todo remplacer avec qq chose du genre
+	# On ne veut pas des $users mais un $user
+	# $user = $database->selectOne('SELECT * FROM user where username= $username AND password = $password');
 	$users = $authentificate->select('SELECT * FROM user where id= 1');
+	
+	# @todo test si la variable $user existe => l'utilisteur est loggué si non l'utilisateur ne l'est pas
+	# @todo delete
 	$u = 'username';
 	$p = 'passwd';
 	foreach ($users as $user) {
@@ -22,14 +30,9 @@ for ($i = 1; $i <= 3; $i++) {
 		$passwd = $user[$p];
 		if ($usr == $username && $pass == $passwd) {
 			$logger->log('Ok, welcome vous êtes dedans!!!');
-			$logger->log('---FIN DU PROGRAMME---');
 			exit();
 		}
 	}
 	$logger->log('ERREUR,' . $i . 'ème essaie!!!');
 }
 $logger->log('Non, vous restez dehors!!!');
-$logger->log('---FIN DU PROGRAMME---');
-
-
-
