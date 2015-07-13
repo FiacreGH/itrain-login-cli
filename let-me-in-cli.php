@@ -29,3 +29,4 @@ foreach ($users as $user) {
 	$logger->log('---FIN DU PROGRAMME---');
 }
 
+<

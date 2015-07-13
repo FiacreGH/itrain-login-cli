@@ -1,35 +1,36 @@
 <?php
 /**
- * Ceci est un crip php qui permet à un user de s'authentifier en CLI
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
  */
 
+/**
+ * Ceci est un crip php qui permet à un user de s'authentifier en CLI
+ */
 include('Classes/Database.php');
 include('Classes/Logger.php');
 //connexion à la bd
-$authentificate = new Ecodev\Database('localhost', 'root', 'root');
-$authentificate->connect('authentificate');
+$database = new Ecodev\Database('localhost', 'root', 'root');
+$database->connect('authentificate');
 $logger = new Logger();
 for ($i = 1; $i <= 3; $i++) {
 	$logger->log('Bonjour, qui êtes-vous?');
-	$usr = trim(fgets(STDIN));
+	$username = trim(fgets(STDIN));
 	$logger->log('Et votre passe?');
-	$pass = trim(fgets(STDIN));
-	$users = $authentificate->select('SELECT * FROM user where id= 1');
-	$u = 'username';
-	$p = 'passwd';
-	foreach ($users as $user) {
-		$username = $user[$u];
-		$passwd = $user[$p];
-		if ($usr == $username && $pass == $passwd) {
-			$logger->log('Ok, welcome vous êtes dedans!!!');
-			$logger->log('---FIN DU PROGRAMME---');
-			exit();
-		}
+	$password = trim(fgets(STDIN));
+	$user = $database->selectOne('SELECT * FROM user where username = "' . $username . '" AND passwd = "' . $password.'"');
+	if (isset($user) && $user['username']==$username && $user['passwd']==$password ) {
+		$logger->log('Ok, welcome vous êtes dedans!!!');
+		exit();
 	}
-	$logger->log('ERREUR,' . $i . 'ème essaie!!!');
+	$logger->log('ERREUR,' . $i .'ème essaie!!!');
 }
 $logger->log('Non, vous restez dehors!!!');
-$logger->log('---FIN DU PROGRAMME---');
-
-
-
