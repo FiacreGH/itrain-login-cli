@@ -21,15 +21,20 @@ include('Classes/Logger.php');
 $database = new Ecodev\Database('localhost', 'root', 'root');
 $database->connect('authentificate');
 $logger = new Logger();
-for ($i = 1; $i <= 3; $i++) {
+$isAuthenticated = FALSE;
+
+for ($i = 1; $i <= 3 || $isAuthenticated; $i++) {
 	$logger->log('Bonjour, qui êtes-vous?');
 	$username = trim(fgets(STDIN));
 	$logger->log('Et votre passe?');
 	$password = trim(fgets(STDIN));
-	$user = $database->selectOne('SELECT * FROM user where username = "' . $username . '" AND passwd = "' . $password.'"');
-	if (isset($user) && $user['username']==$username && $user['passwd']==$password ) {
+	# @todo use md5
+	# md5($password)
+	$user = $database->selectOne('SELECT * FROM user where username = "' . $username . '" AND passwd = "' . $password.'" LIMIT 1');
+	#if (isset($user) && $user['username']==$username && $user['passwd']==$password ) {
+	if (!empty($user)) {
 		$logger->log('Ok, welcome vous êtes dedans!!!');
-		exit();
+		$isAuthenticated = TRUE;
 	}
 	$logger->log('ERREUR,' . $i .'ème essaie!!!');
 }
